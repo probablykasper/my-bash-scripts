@@ -56,25 +56,6 @@ sudo chmod -R 755 <DIRECTORY>
 ## sleepy
 Hibernates your computer. I usually run this after `render` or `chill`.
 
-## to
-Requires [ImageMagick](https://imagemagick.org) for images and [FFmpeg](https://ffmpeg.org) for audio and video. I recommend installing them using [Brew](https://brew.sh) by running `brew install ffmpeg imagemagick`.
-
-Converts audio and video. Running `to` shows this help message:
-```
-Usage:
-    to <format> [options] <file1> [file2...]
-
-Options:
-    format           Format to convert to.
-    --formats        List all supported formats.
-    -v, --verbose    If you love logs.
-    -h, --help       Show this help message.
-
-    Video/audio formats support FFmpeg options (see $ ffmpeg -h).
-    Image formats support ImageMagick options (see $ man magick).
-    Long arguments must have quotes (like "-b:a 128k").
-```
-
 ## to-gif
 Requires [ffmpeg](https://ffmpeg.org) (which I recommend installing using [Brew](https://brew.sh)).
 
