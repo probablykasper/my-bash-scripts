@@ -26,6 +26,8 @@ Basic wrapper around the `docker-compose` command (which you should have if you 
 - When running `d-c run`, it automatically adds the `--rm` argument
 - When running `d-c up`, it automatically runs `docker-compose down` afterwards.
 
+It also works with bash auto completion ([here's how to enable docker-compose completion](https://docs.docker.com/compose/completion/))
+
 ## render
 This will render [After Effects](https://www.adobe.com/products/aftereffects.html) projects, assuming you have After Effects installed in `/Applications/Adobe After Effects CC 2019` (Specifically, the `aerender` file needs to be in there). Running `render` shows the syntax:
 ```
