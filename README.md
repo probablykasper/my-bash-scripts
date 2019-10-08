@@ -5,8 +5,9 @@ These are the basic bash scripts I've made for myself. They're made for macOS, s
 # Install
 
 1. Download the scripts and put them in whatever folder you want. In my case, they are in `~/dev/my-bash-scripts/bin`.
-2. Now you need to make the scripts executable. You can do that by running `chmod +x <YOUR_FOLDER>/*`.
-3. Lastly, add the folder to your PATH, so you can call the scripts by their filename in your terminal from anywhere. Edit the file named `.bash_profile` (or create it if it does not exist). Add the following line to it: `export PATH=<YOUR_FOLDER>:$PATH`.
+2. Make the scripts executable by running `chmod +x <YOUR_FOLDER>/*`.
+3. Add the folder to your PATH, so you can call the scripts by their filename in your terminal from anywhere. Edit the file named `.bash_profile` (or create it if it does not exist). Add the following line to it: `export PATH=<YOUR_FOLDER>:$PATH`.
+
 
 # Scripts
 
@@ -25,6 +26,8 @@ Syntax: chill #h #m
 Basic wrapper around the `docker-compose` command (which you should have if you got Docker installed). The command works the same as `docker-compose`, except:
 - When running `d-c run`, it automatically adds the `--rm` argument
 - When running `d-c up`, it automatically runs `docker-compose down` afterwards.
+
+If you've installed auto completion for `docker-compose` ([here's how to do that](https://docs.docker.com/compose/completion/)), you can enable auto completion for `d-c` by adding `complete -F _docker_compose d-c` to your `.bash-profile`.
 
 ## render
 This will render [After Effects](https://www.adobe.com/products/aftereffects.html) projects, assuming you have After Effects installed in `/Applications/Adobe After Effects CC 2019` (Specifically, the `aerender` file needs to be in there). Running `render` shows the syntax:
