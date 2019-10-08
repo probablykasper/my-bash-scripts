@@ -7,5 +7,3 @@ elif [[ $1 == "up" ]]; then
 else
 	docker-compose "${@:1}"
 fi
-
-complete -F _docker_compose docker-compose docker-compose.exe d-c
