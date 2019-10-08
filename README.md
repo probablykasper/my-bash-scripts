@@ -24,8 +24,8 @@ Syntax: chill #h #m
 
 ## d-c
 Basic wrapper around the `docker-compose` command (which you should have if you got Docker installed). The command works the same as `docker-compose`, except:
-- When running `d-c run`, it automatically adds the `--rm` argument
-- When running `d-c up`, it automatically runs `docker-compose down` afterwards.
+- When running `d-c run`, the `--rm` argument is added (as long as `-d` or `--detach` are not present).
+- When running `d-c up`, `d-c down` runs afterwards (as long as `-d` or `--detach` are not present).
 
 If you've installed auto completion for `docker-compose` ([here's how to do that](https://docs.docker.com/compose/completion/)), you can enable auto completion for `d-c` by adding `complete -F _docker_compose d-c` to your `.bash-profile`.
 

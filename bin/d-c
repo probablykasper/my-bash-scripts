@@ -1,8 +1,19 @@
 #! /bin/bash
 
-if [[ $1 == "run" ]]; then
+# check for -d, --detached
+DETACHED=false
+for (( i=1; i <= "$#"; i++ )); do
+  ARG="${!i}"
+  case "$ARG" in
+    -d|--detach)
+      DETACHED=true
+      ;;
+  esac
+done
+
+if [[ $1 == "run" ]] && [[ $DETACHED == false ]]; then
 	docker-compose run --rm "${@:2}"
-elif [[ $1 == "up" ]]; then
+elif [[ $1 == "up" ]] && [[ $DETACHED == false ]]; then
 	docker-compose up "${@:2}"; docker-compose down
 else
 	docker-compose "${@:1}"
