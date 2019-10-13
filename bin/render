@@ -3,7 +3,7 @@
 color() {
     echo -n "`tput setaf $1`${@:2}"
     # reset color if there are arguments:
-    if [[ "$#" > 1 ]]; then echo -n "`tput setaf 7`"; fi
+    if [[ "$#" > 1 ]]; then echo -n "`tput sgr0`"; fi
 }
 red() { color 1 "$@"; }
 green() { color 2 "$@"; }
