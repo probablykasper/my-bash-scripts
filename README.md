@@ -29,6 +29,12 @@ Basic wrapper around the `docker-compose` command (which you should have if you 
 
 If you've installed auto completion for `docker-compose` ([here's how to do that](https://docs.docker.com/compose/completion/)), you can enable auto completion for `d-c` by adding `complete -F _docker_compose d-c` to your `.bash-profile`.
 
+## md5compare
+Compares md5s of two files.
+```
+Usage: md5compare <file1> <file2>
+```
+
 ## render
 This will render [After Effects](https://www.adobe.com/products/aftereffects.html) projects, assuming you have After Effects installed in `/Applications/Adobe After Effects CC 2019` (Specifically, the `aerender` file needs to be in there). Running `render` shows the syntax:
 ```
