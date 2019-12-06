@@ -28,6 +28,13 @@ Basic wrapper around the `docker-compose` command (which you should have if you 
 
 If you've installed auto completion for `docker-compose` ([here's how to do that](https://docs.docker.com/compose/completion/)), you can enable auto completion for `d-c` by adding `complete -F _docker_compose d-c` to your `.bash-profile`.
 
+## copy
+Run a command and copy the output to the clipboard. For example, run `copy pwd` to copy the current path.
+```
+Usage:
+    copy <command> [args...]
+```
+
 ## md5compare
 Compares md5s of two files.
 ```

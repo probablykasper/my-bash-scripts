@@ -1,0 +1,31 @@
+#! /bin/bash
+
+color() {
+    echo -n "`tput setaf $1`${@:2}"
+    # reset color if there are arguments:
+    if [[ "$#" > 1 ]]; then echo -n "`tput sgr0`"; fi
+}
+red() { color 1 "$@"; }
+green() { color 2 "$@"; }
+cyan() { color 6 "$@"; }
+reset() { color 7 "$@"; echo -n `tput sgr0`; }
+
+ARG1="$1"
+if [[ $ARG1 ]]; then
+  output=$(eval "$@")
+
+  echo "$output"
+  echo "$output" | pbcopy -selection clipboard
+else
+  FILENAME=${0##*/}
+  echo ""
+  echo "`green $FILENAME:`"
+  echo "    Run a command and copy the output to the clipboard."
+  echo "    For example, run `cyan copy pwd` to copy the current path."
+  echo ""
+  echo "`green Usage:`"
+  echo "    $FILENAME <command> [args...]"
+  echo ""
+# Example: copy pwd"
+
+fi
