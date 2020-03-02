@@ -45,12 +45,14 @@ Usage: md5compare <file1> <file2>
 This will render [After Effects](https://www.adobe.com/products/aftereffects.html) projects, assuming you have After Effects installed in `/Applications/Adobe After Effects CC 2019` (Specifically, the `aerender` file needs to be in there). Running `render` shows the syntax:
 ```
 Usage:
-    render <file> [file...]
-
+  render [options] <file> [file...]
+    
 Options:
-    file   After Effects .aep file for After Effects' aerender to render.
+  file        .aep file for After Effects' aerender to render.
+  -h, --help  Show this help text
+  -k, --kill  Kill allaerendercore processes (they tend to get stuck).
+              DO NOT use this if you have multiple renders running!
 ```
-It was made to be able to support multiple path arguments, as well as taking folders as path arguments to render every .aep file inside those folders, but I don't think that works. Might fix that someday if I need it.
 
 ## reset-permissions
 Resets permissions of a directory. You should probably know what you're doing before running this.

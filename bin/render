@@ -15,11 +15,14 @@ aerender=/Applications/Adobe\ After\ Effects\ CC\ 2019/aerender
 help() {
   FILENAME=${0##*/}
   echo "
-  `green Usage:`
-    `cyan $FILENAME` <file>
-
-  `green Options:`
-    `cyan file`   .aep file for After Effects' aerender to render.
+`green Usage:`
+  `cyan $FILENAME` [options] <file> [file...]
+    
+`green Options:`
+  `cyan file`        .aep file for After Effects' aerender to render.
+  `cyan -h, --help`  Show this help text
+  `cyan -k, --kill`  Kill allaerendercore processes (they tend to get stuck).
+              DO NOT use this if you have multiple renders running!
   "
 }
 
@@ -33,7 +36,11 @@ err() {
 
 # proactively check for errors and args
 for ARG in "$@"; do
-  if [[ "$ARG" == "-h" || "$ARG" == "--help" ]]; then
+  if [[ "$ARG" == "-k" || "$ARG" == "--kill" ]]; then
+    KILL=true
+  elif [[ "$ARG" == "-h" || "$ARG" == "--help" ]]; then
+    help; exit 0
+  elif [[ "$ARG" == "-h" || "$ARG" == "--help" ]]; then
     help; exit 0
   elif [[ ! -f "$ARG" ]]; then
     err "File does not exist: $ARG"
@@ -44,7 +51,20 @@ for ARG in "$@"; do
   fi
 done
 
+# kill aerendercore processes and quit
+if [[ $KILL == true && -z $FILE ]]; then
+  echo "Killing all aerendercore processes..."
+  killall aerendercore
+  exit 0
+fi
+
 # render
 echo ""
 ABSOLUTE_FILE_PATH="$(cd "$(dirname "$FILE")" && pwd)/$(basename "$FILE")"
 command "$aerender" -project "$ABSOLUTE_FILE_PATH" || err "Render failed: $ARG"
+
+# kill aerendercore processes
+if [[ $KILL == true ]]; then
+  echo "Killing all aerendercore processes..."
+  killall aerendercore
+fi
