@@ -14,7 +14,7 @@ done
 if [[ $1 == "run" ]] && [[ $DETACHED == false ]]; then
 	docker-compose run --rm "${@:2}"
 elif [[ $1 == "up" ]] && [[ $DETACHED == false ]]; then
-	docker-compose up "${@:2}"; docker-compose down
+	docker-compose up "${@:2}"; docker-compose down --volumes
 else
 	docker-compose "${@:1}"
 fi
