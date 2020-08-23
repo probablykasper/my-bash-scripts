@@ -74,7 +74,7 @@ sudo chmod -R 755 <DIRECTORY>
 Hibernates your computer. I usually run this after `render` or `chill`.
 
 ## to-gif
-Requires [ffmpeg](https://ffmpeg.org) (which I recommend installing using [Brew](https://brew.sh)).
+Requires [ffmpeg](https://ffmpeg.org) (which I recommend installing using [Homebrew](https://brew.sh)).
 
 Converts videos into gifs. If you do this frequently I would probably use some app instead.
 
