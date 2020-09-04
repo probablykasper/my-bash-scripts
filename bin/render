@@ -10,7 +10,7 @@ green() { color 2 "$@"; }
 cyan() { color 6 "$@"; }
 reset() { color 7 "$@"; echo -n `tput sgr0`; }
 
-aerender=/Applications/Adobe\ After\ Effects\ CC\ 2019/aerender
+aerender='/Applications/Adobe After Effects 2020/aerender'
 
 help() {
   FILENAME=${0##*/}
