@@ -9,10 +9,10 @@ These are the basic bash scripts I've made for myself. They're made for macOS, s
 
 ## Scripts
 
-## welp
+### welp
 Super simple script that lists the files in the same folder as the script is in. In other words, it lists the scripts here.
 
-## chill
+### chill
 
 ```
 chill
@@ -24,14 +24,14 @@ Usage examples:
     chill 50h 1m
 ```
 
-## d-c
+### d-c
 Basic wrapper around the `docker-compose` command (which you should have if you got Docker installed). The command works the same as `docker-compose`, except:
 - When running `d-c run`, the `--rm` argument is added (as long as `-d` or `--detach` are not present).
 - When running `d-c up`, `d-c down` runs afterwards (as long as `-d` or `--detach` are not present).
 
 If you've installed auto completion for `docker-compose` ([here's how to do that](https://docs.docker.com/compose/completion/)), you can enable auto completion for `d-c` by adding `complete -F _docker_compose d-c` to your `.bash-profile`.
 
-## copy
+### copy
 Run a command and copy the output to the clipboard. For example, run `copy pwd` to copy the current path.
 
 ```
@@ -39,14 +39,14 @@ Usage:
     copy <command> [args...]
 ```
 
-## md5compare
+### md5compare
 Compares md5s of two files.
 
 ```
 Usage: md5compare <file1> <file2>
 ```
 
-## render
+### render
 This will render [After Effects](https://www.adobe.com/products/aftereffects.html) projects, assuming you have After Effects installed in `/Applications/Adobe After Effects CC 2019` (Specifically, the `aerender` file needs to be in there). Running `render` shows the syntax:
 
 ```
@@ -60,7 +60,7 @@ Options:
               DO NOT use this if you have multiple renders running!
 ```
 
-## reset-permissions
+### reset-permissions
 Resets permissions of a directory. You should probably know what you're doing before running this.
 
 Running `reset-permissions` shows the syntax:
@@ -78,10 +78,10 @@ sudo chown -R <USERNAME> <DIRECTORY> && \
 sudo chmod -R 755 <DIRECTORY>
 ```
 
-## sleepy
+### sleepy
 Hibernates your computer. I usually run this after `render` or `chill`.
 
-## sfx
+### sfx
 
 ```
 sfx:
@@ -94,7 +94,7 @@ Sounds:
     ding beep
 ```
 
-## to-gif
+### to-gif
 Requires [ffmpeg](https://ffmpeg.org) (which I recommend installing using [Homebrew](https://brew.sh)).
 
 Converts videos into gifs. If you do this frequently I would probably use some app instead.
