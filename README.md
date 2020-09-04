@@ -13,12 +13,15 @@ These are the basic bash scripts I've made for myself. They're made for macOS, s
 Super simple script that lists the files in the same folder as the script is in. In other words, it lists the scripts here.
 
 ## chill
-Stops execution for a specified amount of time. Useful for scheduling stuff. `chill` shows the syntax:
 
 ```
-Syntax: chill #h
-Syntax: chill #m
-Syntax: chill #h #m
+chill
+    Do nothing for a specified amount of time. Useful for scheduling stuff.
+
+Usage examples:
+    chill 1h
+    chill 30m
+    chill 50h 1m
 ```
 
 ## d-c
