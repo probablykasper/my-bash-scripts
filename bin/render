@@ -31,6 +31,7 @@ if [[ "$#" < 1 ]]; then help; exit 0; fi
 
 err() {
   echo `red ✖ Error:` "$1"
+  sfx beep
   exit 1
 }
 
@@ -68,3 +69,5 @@ if [[ $KILL == true ]]; then
   echo "Killing all aerendercore processes..."
   killall aerendercore
 fi
+
+sfx ding
