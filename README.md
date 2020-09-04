@@ -10,7 +10,7 @@ These are the basic bash scripts I've made for myself. They're made for macOS, s
 ## Scripts
 
 ### welp
-Super simple script that lists the files in the same folder as the script is in. In other words, it lists the scripts here.
+Lists all these scripts, aka everything in the `bin` folder.
 
 ### chill
 
