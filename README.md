@@ -4,8 +4,16 @@ These are the basic bash scripts I've made for myself. They're made for macOS, s
 
 ## Install
 
-1. Download the scripts and put them in whatever folder you want. In my case, they are in `~/dev/my-bash-scripts/bin`.
-2. Add the folder to your PATH, so you can call the scripts by their filename in your terminal from anywhere. Edit the file named `.bash_profile` (or create it if it does not exist). Add the following line to it: `export PATH=<YOUR_FOLDER>:$PATH`.
+1. Download the scripts and put them in whatever folder you want. In my case, I just keep them with my other git repos.
+2. Add the folder to your PATH, so you can call the scripts by their filename in your terminal from anywhere.
+- For `bash`, add the following to your `~/.bash_profile`:
+    ```bash
+    export PATH=<YOUR_FOLDER>:$PATH
+    ```
+- For `fish`, add the following to your `~/.config/fish/config.fish`:
+    ```fish
+    set PATH "/Users/kasper/dev/git/my-bash-scripts/bin:$PATH"
+    ```
 
 ## Scripts
 
@@ -25,11 +33,19 @@ Usage examples:
 ```
 
 ### d-c
-Basic wrapper around the `docker-compose` command (which you should have if you got Docker installed). The command works the same as `docker-compose`, except:
+Basic wrapper around the `docker-compose` command. The command works the same as `docker-compose`, except:
 - When running `d-c run`, the `--rm` argument is added (as long as `-d` or `--detach` are not present).
 - When running `d-c up`, `d-c down` runs afterwards (as long as `-d` or `--detach` are not present).
 
-If you've installed auto completion for `docker-compose` ([here's how to do that](https://docs.docker.com/compose/completion/)), you can enable auto completion for `d-c` by adding `complete -F _docker_compose d-c` to your `.bash-profile`.
+If you've installed auto completion for `docker-compose` ([here's how to do that](https://docs.docker.com/compose/completion/)), this is how you can enable auto completion for `d-c`:
+- For `bash`, add the following to your `~/.bash_profile`:
+    ```bash
+    complete -F _docker_compose d-c
+    ```
+- For `fish`, add the following to your `~/.config/fish/config.fish`:
+    ```fish
+    complete --command d-c --wraps docker-compose
+    ```
 
 ### copy
 Run a command and copy the output to the clipboard. For example, run `copy pwd` to copy the current path.
