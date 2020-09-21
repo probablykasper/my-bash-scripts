@@ -32,7 +32,7 @@ Usage examples:
     chill 50h 1m
 ```
 
-### d-c
+### dco
 Basic wrapper around the `docker-compose` command. The command works the same as `docker-compose`, except:
 - When running `dco run`, the `--rm` argument is added (as long as `-d` or `--detach` are not present).
 - When running `dco up`, `dco down` runs afterwards (as long as `-d` or `--detach` are not present).
