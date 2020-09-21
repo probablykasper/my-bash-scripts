@@ -34,17 +34,17 @@ Usage examples:
 
 ### d-c
 Basic wrapper around the `docker-compose` command. The command works the same as `docker-compose`, except:
-- When running `d-c run`, the `--rm` argument is added (as long as `-d` or `--detach` are not present).
-- When running `d-c up`, `d-c down` runs afterwards (as long as `-d` or `--detach` are not present).
+- When running `dco run`, the `--rm` argument is added (as long as `-d` or `--detach` are not present).
+- When running `dco up`, `dco down` runs afterwards (as long as `-d` or `--detach` are not present).
 
-If you've installed auto completion for `docker-compose` ([here's how to do that](https://docs.docker.com/compose/completion/)), this is how you can enable auto completion for `d-c`:
+If you've installed auto completion for `docker-compose` ([here's how to do that](https://docs.docker.com/compose/completion/)), this is how you can enable auto completion for `dco`:
 - For `bash`, add the following to your `~/.bash_profile`:
     ```bash
-    complete -F _docker_compose d-c
+    complete -F _docker_compose dco
     ```
 - For `fish`, add the following to your `~/.config/fish/config.fish`:
     ```fish
-    complete --command d-c --wraps docker-compose
+    complete --command dco --wraps docker-compose
     ```
 
 ### copy
