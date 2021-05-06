@@ -1,0 +1,41 @@
+#! /bin/bash
+
+color() {
+    echo -n "`tput setaf $1`${@:2}"
+    # reset color if there are arguments:
+    if [[ "$#" > 1 ]]; then tput sgr0; fi
+}
+red() { color 1 "$@"; }
+green() { color 2 "$@"; }
+yellow() { color 3 "$@"; }
+cyan() { color 6 "$@"; }
+reset() { tput sgr0; }
+
+help() {
+    echo "Usage: `cyan $FILENAME` <file>"
+}
+
+FILENAME=${0##*/}
+FILE="$1"
+
+if [[ "$#" < 1 ]]; then help; exit 0; fi
+
+if [[ "$FILE" == "--help" || "$FILE" == "-h" ]]; then
+    help; exit 0
+fi
+
+FILE_WITHOUT_EXT="${FILE%.*}"
+FILE_EXT="${FILE##*.}"
+
+COUNT=1
+NEW_FILE="$FILE_WITHOUT_EXT without audio.$FILE_EXT"
+while [[ -f "$NEW_FILE" ]]; do
+    if [[ -f "$NEW_FILE" ]]; then
+        NEW_FILE="$FILE_WITHOUT_EXT without audio ($COUNT).$FILE_EXT"
+        (( COUNT++ ))
+    else
+        break
+    fi
+done
+
+ffmpeg -i "$FILE" -c copy -an "$NEW_FILE" || { echo `red Error:` Conversion failed;  exit 1; }
