@@ -12,10 +12,10 @@ cyan() { color 6 "$@"; }
 reset() { tput sgr0; }
 
 help() {
-    echo "Usage: `cyan $FILENAME` <file>"
+    echo "Usage: `cyan $SCRIPTNAME` <file>"
 }
 
-FILENAME=${0##*/}
+SCRIPTNAME=${0##*/}
 FILE="$1"
 
 if [[ "$#" < 1 ]]; then help; exit 0; fi

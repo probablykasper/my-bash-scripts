@@ -17,14 +17,14 @@ if [[ $ARG1 ]]; then
   echo "$output"
   echo "$output" | pbcopy -selection clipboard
 else
-  FILENAME=${0##*/}
+  SCRIPTNAME=${0##*/}
   echo ""
-  echo "`green $FILENAME:`"
+  echo "`green $SCRIPTNAME:`"
   echo "    Run a command and copy the output to the clipboard."
   echo "    For example, run `cyan copy pwd` to copy the current path."
   echo ""
   echo "`green Usage:`"
-  echo "    $FILENAME <command> [args...]"
+  echo "    $SCRIPTNAME <command> [args...]"
   echo ""
 # Example: copy pwd"
 

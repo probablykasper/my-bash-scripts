@@ -25,8 +25,8 @@ then
     rm -f ${PALETTE}
 
 else
-    SCRIPT_FILENAME=${0##*/}
-    echo "Syntax: $SCRIPT_FILENAME <file> [fps] [scale] [duration] [start_at]"
+    SCRIPTNAME=${0##*/}
+    echo "Syntax: $SCRIPTNAME <file> [fps] [scale] [duration] [start_at]"
     echo "    file:     File to convert to gif. Required."
     echo "    fps:      Defaults to 15."
     echo "    scale:    GIF resolution. Defaults to 1."

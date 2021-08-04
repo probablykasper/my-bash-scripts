@@ -26,7 +26,7 @@ if [[ $FILE_1 ]] && [[ $FILE_2 ]]; then
 
 else
 
-  FILENAME=${0##*/}
-  echo "`green Usage:` $FILENAME <file1> <file2>"
+  SCRIPTNAME=${0##*/}
+  echo "`green Usage:` $SCRIPTNAME <file1> <file2>"
 
 fi

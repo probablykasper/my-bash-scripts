@@ -23,13 +23,13 @@ if [[ $ARG1 == 'ding' ]]; then
 elif [[ $ARG1 == 'beep' ]]; then
   afplay "$SOUNDS_PATH/Beep.mp3"
 else
-  FILENAME=${0##*/}
+  SCRIPTNAME=${0##*/}
   echo ""
-  echo "`green $FILENAME:`"
-  echo "    Play a sound effect. Example: `yellow $FILENAME ding`."
+  echo "`green $SCRIPTNAME:`"
+  echo "    Play a sound effect. Example: `yellow $SCRIPTNAME ding`."
   echo ""
   echo "`green Usage:`"
-  echo "    $FILENAME <sound>"
+  echo "    $SCRIPTNAME <sound>"
   echo ""
   echo "`green Sounds:`"
   echo "    ding beep"

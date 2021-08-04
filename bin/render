@@ -13,10 +13,10 @@ reset() { color 7 "$@"; echo -n `tput sgr0`; }
 aerender='/Applications/Adobe After Effects 2020/aerender'
 
 help() {
-  FILENAME=${0##*/}
+  SCRIPTNAME=${0##*/}
   echo "
 `green Usage:`
-  `cyan $FILENAME` [options] <file> [file...]
+  `cyan $SCRIPTNAME` [options] <file> [file...]
     
 `green Options:`
   `cyan file`        .aep file for After Effects' aerender to render.
@@ -39,8 +39,6 @@ err() {
 for ARG in "$@"; do
   if [[ "$ARG" == "-k" || "$ARG" == "--kill" ]]; then
     KILL=true
-  elif [[ "$ARG" == "-h" || "$ARG" == "--help" ]]; then
-    help; exit 0
   elif [[ "$ARG" == "-h" || "$ARG" == "--help" ]]; then
     help; exit 0
   elif [[ ! -f "$ARG" ]]; then
