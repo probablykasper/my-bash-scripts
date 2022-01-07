@@ -1,10 +1,12 @@
 #! /bin/bash
 
 help() {
-	SCRIPTNAME=${0##*/}
-  echo "Update all file extensions in a directory using `color 3 git mv`"
-  echo ""
-  echo "`color 2 Usage:` $SCRIPTNAME <username> <directory>"
+  echo "Resets permissions of a directory. Make sure you know what you're doing first."
+	echo ""
+	echo "These are the commands it runs:"
+	echo `color 3 'sudo chmod -RN <DIRECTORY> && sudo chown -R <USERNAME> <DIRECTORY> && sudo chmod -R 755 <DIRECTORY>'`
+	echo ""
+  echo "`color 2 Usage:` reset-permissions <username> <directory>"
 	echo ""
 }
 
