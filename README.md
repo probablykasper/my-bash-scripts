@@ -1,6 +1,6 @@
 # my-bash-scripts
 
-These are the basic bash scripts I've made for myself. They're made for macOS, so there's no guarantee they'll work on other OS-es.
+These are the basic bash scripts I've made for myself. They're made for macOS, so some of them may not work on other platforms.
 
 ## Install
 
@@ -17,20 +17,10 @@ These are the basic bash scripts I've made for myself. They're made for macOS, s
 
 ## Scripts
 
+Some of the scripts are described below. To see the help menus for the other scripts, either open the files inside `bin` or run the commands directly.
+
 ### welp
-Lists all these scripts, aka everything in the `bin` folder.
-
-### chill
-
-```
-chill
-    Do nothing for a specified amount of time. Useful for scheduling stuff.
-
-Usage examples:
-    chill 1h
-    chill 30m
-    chill 50h 1m
-```
+Lists all scripts in the `bin` folder.
 
 ### dco
 Basic wrapper around the `docker-compose` command. The command works the same as `docker-compose`, except:
@@ -47,81 +37,5 @@ If you've installed auto completion for `docker-compose` ([here's how to do that
     complete --command dco --wraps docker-compose
     ```
 
-### copy
-Run a command and copy the output to the clipboard. For example, run `copy pwd` to copy the current path.
-
-```
-Usage:
-    copy <command> [args...]
-```
-
-### md5compare
-Compares md5s of two files.
-
-```
-Usage: md5compare <file1> <file2>
-```
-
-### render
-This will render [After Effects](https://www.adobe.com/products/aftereffects.html) projects, assuming you have After Effects installed in `/Applications/Adobe After Effects CC 2019` (Specifically, the `aerender` file needs to be in there). Running `render` shows the syntax:
-
-```
-Usage:
-  render [options] <file> [file...]
-
-Options:
-  file        .aep file for After Effects' aerender to render.
-  -h, --help  Show this help text
-  -k, --kill  Kill allaerendercore processes (they tend to get stuck).
-              DO NOT use this if you have multiple renders running!
-```
-
-### reset-permissions
-Resets permissions of a directory. You should probably know what you're doing before running this.
-
-Running `reset-permissions` shows the syntax:
-
-```
-reset-permissions
-usage: reset-permissions <username> <directory>
-```
-
-This is the command it will run:
-
-```
-sudo chmod -RN <DIRECTORY> && \
-sudo chown -R <USERNAME> <DIRECTORY> && \
-sudo chmod -R 755 <DIRECTORY>
-```
-
 ### sleepy
-Hibernates your computer. I usually run this after `render` or `chill`.
-
-### sfx
-
-```
-sfx:
-    Play a sound effect. Example: sfx ding.
-
-Usage:
-    sfx <sound>
-
-Sounds:
-    ding beep
-```
-
-### to-gif
-Requires [ffmpeg](https://ffmpeg.org) (which I recommend installing using [Homebrew](https://brew.sh)).
-
-Converts videos into gifs. If you do this frequently I would probably use some app instead.
-
-Running `to-gif` shows the syntax:
-
-```
-Syntax: to-gif <file> [fps] [scale] [duration] [start_at]
-    file:     File to convert to gif. Required.
-    fps:      Defaults to 15.
-    scale:    GIF resolution. Defaults to 1.
-    duration: How long the gif will be, in seconds. Defaults to 999999.
-    start_at: Where the video starts, in seconds. Defaults to 0
-```
+Puts your computer to sleep.
