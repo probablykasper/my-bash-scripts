@@ -1,0 +1,17 @@
+#! /bin/bash
+
+help() {
+  SCRIPTNAME=${0##*/}
+  echo "Copy specified files from a directory, keeping the directory structure."
+  echo ""
+  echo "`color 2 Example:` $SCRIPTNAME ./from ./to '*.mp4'"
+  echo ""
+}
+
+if [[ "$#" < 3 ]]; then help; exit 0; fi
+
+FROM="$1"
+TO="$2"
+PATTERN="$3"
+
+find "$FROM" -name "$PATTERN" | cpio -pdm "$TO"
