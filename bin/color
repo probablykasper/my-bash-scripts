@@ -1,0 +1,27 @@
+#! /bin/bash
+
+help() {
+	SCRIPTNAME=${0##*/}
+  echo "Turn text colorful"
+  echo ""
+  echo "`color 2 Usage:` echo <color number>"
+  echo ""
+  echo "`color 2 Example:` echo Hello \`color 2 world\`"
+  echo ""
+  echo "To see all available colors, run `color 3 color --list`"
+  echo ""
+}
+
+# no args
+if [[ "$#" < 1 ]]; then help; exit 0; fi
+
+if [[ "$1" == "--list" ]]; then
+  printall() {
+    for ((i=0;i<256;i++)); do
+      echo "`tput setaf $i`$i`tput sgr0`"
+    done
+  }
+  printall
+fi
+
+echo -n "`tput setaf $1`${@:2}`tput sgr0`"
