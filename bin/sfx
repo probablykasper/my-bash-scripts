@@ -1,15 +1,15 @@
 #! /bin/bash
 
-color() {
-    echo -n "`tput setaf $1`${@:2}"
-    # reset color if there are arguments:
-    if [[ "$#" > 1 ]]; then echo -n "`tput sgr0`"; fi
+help() {
+  echo "Play a sound effect."
+  echo ""
+  echo "`color 2 Usage:` sfx <sound>"
+  echo ""
+  echo "`color 2 Sounds:`"
+  echo "    ding"
+  echo "    beep"
+  echo ""
 }
-red() { color 1 "$@"; }
-green() { color 2 "$@"; }
-yellow() { color 3 "$@"; }
-cyan() { color 6 "$@"; }
-reset() { color 7 "$@"; echo -n `tput sgr0`; }
 
 ARG1="$1"
 
@@ -23,17 +23,5 @@ if [[ $ARG1 == 'ding' ]]; then
 elif [[ $ARG1 == 'beep' ]]; then
   afplay "$SOUNDS_PATH/Beep.mp3"
 else
-  SCRIPTNAME=${0##*/}
-  echo ""
-  echo "`green $SCRIPTNAME:`"
-  echo "    Play a sound effect. Example: `yellow $SCRIPTNAME ding`."
-  echo ""
-  echo "`green Usage:`"
-  echo "    $SCRIPTNAME <sound>"
-  echo ""
-  echo "`green Sounds:`"
-  echo "    ding beep"
-  echo ""
-# Example: copy pwd"
-
+  help
 fi

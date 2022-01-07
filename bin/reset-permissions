@@ -1,17 +1,15 @@
 #! /bin/bash
 
-if [[ $2 == '' ]]; then
-
+help() {
 	SCRIPTNAME=${0##*/}
+  echo "Update all file extensions in a directory using `color 3 git mv`"
+  echo ""
+  echo "`color 2 Usage:` $SCRIPTNAME <username> <directory>"
+	echo ""
+}
 
-	# Colors
-	GREEN='\033[0;32m'
-	RESET='\033[0m'
-
-	echo    ""
-	echo -e "${GREEN}$SCRIPTNAME${RESET}"
-	echo -e "usage: $SCRIPTNAME <username> <directory>"
-	echo    ""
+if [[ "$2" == '' ]]; then
+	help
 else
 
 	USERNAME=$1

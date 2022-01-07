@@ -1,22 +1,9 @@
 #! /bin/bash
 
-color() {
-    echo -n "`tput setaf $1`${@:2}"
-    # reset color if there are arguments:
-    if [[ "$#" > 1 ]]; then echo -n "`tput sgr0`"; fi
-}
-red() { color 1 "$@"; }
-green() { color 2 "$@"; }
-yellow() { color 3 "$@"; }
-cyan() { color 6 "$@"; }
-reset() { color 7 "$@"; echo -n `tput sgr0`; }
-
-SCRIPTNAME=${0##*/}
 
 help() {
-  echo ""
-  echo "`yellow $SCRIPTNAME`"
-  echo "    Types out your clipboard."
+  SCRIPTNAME=${0##*/}
+  echo "Types out your clipboard."
   echo ""
 }
 

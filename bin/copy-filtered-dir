@@ -1,10 +1,9 @@
 #! /bin/bash
 
 help() {
-  SCRIPTNAME=${0##*/}
   echo "Copy specified files from a directory, keeping the directory structure."
   echo ""
-  echo "`color 2 Example:` $SCRIPTNAME ./from ./to '*.mp4'"
+  echo "`color 2 Example:` copy-filtered-dir ./from ./to '*.mp4'"
   echo ""
 }
 

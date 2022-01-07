@@ -1,25 +1,9 @@
 #! /bin/bash
 
-color() {
-    echo -n "`tput setaf $1`${@:2}"
-    # reset color if there are arguments:
-    if [[ "$#" > 1 ]]; then echo -n "`tput sgr0`"; fi
-}
-red() { color 1 "$@"; }
-green() { color 2 "$@"; }
-yellow() { color 3 "$@"; }
-cyan() { color 6 "$@"; }
-reset() { color 7 "$@"; echo -n `tput sgr0`; }
-
-SCRIPTNAME=${0##*/}
-
 help() {
+  echo "Update all file extensions in a directory using `color 3 git mv`."
   echo ""
-  echo "`yellow $SCRIPTNAME`"
-  echo "    Update all file extensions in a directory using `cyan git mv`"
-  echo ""
-  echo "`yellow Usage example`"
-  echo "    $SCRIPTNAME .png .final.png"
+  echo "`color 2 Example:` git-mv-ext .png .final.png"
   echo ""
 }
 
@@ -38,7 +22,7 @@ do
     ENDINDEX=$(expr $LEN - $FROM_LEN)
     BASE=${ENTRY:0:$ENDINDEX}
     NEWNAME="$BASE$TO"
-    echo "git mv `red $ENTRY` `green $NEWNAME`"
+    echo "git mv `color 1 $ENTRY` `color 2 $NEWNAME`"
     git mv "$ENTRY" "$NEWNAME"
   fi
 done

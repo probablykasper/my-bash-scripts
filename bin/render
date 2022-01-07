@@ -1,36 +1,23 @@
 #! /bin/bash
 
-color() {
-    echo -n "`tput setaf $1`${@:2}"
-    # reset color if there are arguments:
-    if [[ "$#" > 1 ]]; then echo -n "`tput sgr0`"; fi
-}
-red() { color 1 "$@"; }
-green() { color 2 "$@"; }
-cyan() { color 6 "$@"; }
-reset() { color 7 "$@"; echo -n `tput sgr0`; }
-
 aerender='/Applications/Adobe After Effects 2020/aerender'
 
 help() {
-  SCRIPTNAME=${0##*/}
-  echo "
-`green Usage:`
-  `cyan $SCRIPTNAME` [options] <file> [file...]
-    
-`green Options:`
-  `cyan file`        .aep file for After Effects' aerender to render.
-  `cyan -h, --help`  Show this help text
-  `cyan -k, --kill`  Kill allaerendercore processes (they tend to get stuck).
-              DO NOT use this if you have multiple renders running!
-  "
+  echo "`color 2 Usage:` render [options] <file> [file...]"
+  echo ""
+  echo "`color 2 Options:`"
+  echo "    `color 3 file`        .aep file for After Effects' aerender to render."
+  echo "    `color 3 -h, --help`  Show this help text"
+  echo "    `color 3 -k, --kill`  Kill allaerendercore processes (they tend to get stuck)."
+  echo "                DO NOT use this if you have multiple renders running!"
+  echo ""
 }
 
 # no args
 if [[ "$#" < 1 ]]; then help; exit 0; fi
 
 err() {
-  echo `red ✖ Error:` "$1"
+  echo `color 1 ✖ Error:` "$1"
   sfx beep
   exit 1
 }

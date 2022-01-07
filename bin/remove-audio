@@ -1,21 +1,10 @@
 #! /bin/bash
 
-color() {
-    echo -n "`tput setaf $1`${@:2}"
-    # reset color if there are arguments:
-    if [[ "$#" > 1 ]]; then tput sgr0; fi
-}
-red() { color 1 "$@"; }
-green() { color 2 "$@"; }
-yellow() { color 3 "$@"; }
-cyan() { color 6 "$@"; }
-reset() { tput sgr0; }
-
 help() {
-    echo "Usage: `cyan $SCRIPTNAME` <file>"
+    echo "`color 2 Usage:` remove-audio <file>"
+    echo ""
 }
 
-SCRIPTNAME=${0##*/}
 FILE="$1"
 
 if [[ "$#" < 1 ]]; then help; exit 0; fi
@@ -38,4 +27,4 @@ while [[ -f "$NEW_FILE" ]]; do
     fi
 done
 
-ffmpeg -i "$FILE" -c copy -an "$NEW_FILE" || { echo `red Error:` Conversion failed;  exit 1; }
+ffmpeg -i "$FILE" -c copy -an "$NEW_FILE" || { echo `color 1 Error:` Conversion failed;  exit 1; }

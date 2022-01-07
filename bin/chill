@@ -1,27 +1,12 @@
 #! /bin/bash
 
-color() {
-    echo -n "`tput setaf $1`${@:2}"
-    # reset color if there are arguments:
-    if [[ "$#" > 1 ]]; then echo -n "`tput sgr0`"; fi
-}
-red() { color 1 "$@"; }
-green() { color 2 "$@"; }
-yellow() { color 3 "$@"; }
-cyan() { color 6 "$@"; }
-reset() { color 7 "$@"; echo -n `tput sgr0`; }
-
-SCRIPTNAME=${0##*/}
-
 help() {
+  echo "Do nothing for some time. Useful for scheduling stuff."
   echo ""
-  echo "`yellow $SCRIPTNAME`"
-  echo "    Do nothing for some time. Useful for scheduling stuff."
-  echo ""
-  echo "`yellow Usage examples:`"
-  echo "    $SCRIPTNAME 1h"
-  echo "    $SCRIPTNAME 30m 2s"
-  echo "    $SCRIPTNAME 1s 10s 10h 60m"
+  echo "`color 2 Examples:`"
+  echo "    chill 1h"
+  echo "    chill 30m 2s"
+  echo "    chill 1s 10s 10h 60m"
   echo ""
 }
 

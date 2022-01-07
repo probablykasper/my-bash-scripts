@@ -1,14 +1,11 @@
 #! /bin/bash
 
 help() {
-	SCRIPTNAME=${0##*/}
-  echo "Turn text colorful"
+  echo "Turn text colorful. To see all available colors, run `color 3 color --list`."
   echo ""
-  echo "`color 2 Usage:` echo <color number>"
+  echo "`color 2 Usage:` color <color number>"
   echo ""
   echo "`color 2 Example:` echo Hello \`color 2 world\`"
-  echo ""
-  echo "To see all available colors, run `color 3 color --list`"
   echo ""
 }
 

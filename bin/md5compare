@@ -1,14 +1,12 @@
 #!/bin/bash
 
-color() {
-    echo -n "`tput setaf $1`${@:2}"
-    # reset color if there are arguments:
-    if [[ "$#" > 1 ]]; then echo -n "`tput sgr0`"; fi
+
+help() {
+  echo "Compare md5 hashes of two files."
+	echo ""
+	echo "`color 2 Usage:` md5compare [options] <file|directory>"
+	echo ""
 }
-red() { color 1 "$@"; }
-green() { color 2 "$@"; }
-cyan() { color 6 "$@"; }
-reset() { color 7 "$@"; echo -n `tput sgr0`; }
 
 FILE_1="$1"
 FILE_2="$2"
@@ -16,17 +14,14 @@ FILE_2="$2"
 if [[ $FILE_1 ]] && [[ $FILE_2 ]]; then
   MD5_1="$(md5 -q "$FILE_1")"
   MD5_2="$(md5 -q "$FILE_2")"
-  echo `cyan File 1:` $MD5_1
-  echo `cyan File 2:` $MD5_2
+  echo `color 6 File 1:` $MD5_1
+  echo `color 6 File 2:` $MD5_2
   if [[ $MD5_1 == $MD5_2 ]]; then
-    echo "`green Match`"
+    echo "`color 2 Match`"
   else
-    echo "`red Mismatch`"
+    echo "`color 1 Mismatch`"
   fi
 
 else
-
-  SCRIPTNAME=${0##*/}
-  echo "`green Usage:` $SCRIPTNAME <file1> <file2>"
-
+  help
 fi

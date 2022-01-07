@@ -1,28 +1,15 @@
 #! /bin/bash
 
-color() {
-	echo -n "`tput setaf $1`${@:2}"
-	# reset color if there are arguments:
-	if [[ "$#" > 1 ]]; then tput sgr0; fi
-}
-red() { color 1 "$@"; }
-green() { color 2 "$@"; }
-yellow() { color 3 "$@"; }
-cyan() { color 6 "$@"; }
-reset() { tput sgr0; }
-
-SCRIPTNAME=${0##*/}
-
 help() {
-	echo "\
-Usage: `yellow $SCRIPTNAME` [options] <file|directory>
-
-Check mp3 files for errors/warnings using ffprobe.
-Files not ending in .mp3 will be skipped.
-
-Options:
-  `yellow -h, --help`     Show this help text
-  `yellow -v, --verbose`  Verbose logging"
+	echo "Check mp3 files for errors/warnings using ffprobe."
+	echo "Files not ending in .mp3 will be skipped."
+	echo ""
+	echo "`color 2 Usage:` mp3check [options] <file|directory>"
+	echo ""
+	echo "`color 2 Options:`"
+  echo "    `color 3 -h, --help`     Show this help text"
+  echo "    `color 3 -v, --verbose`  Verbose logging"
+	echo ""
 }
 
 # no args
@@ -53,12 +40,12 @@ if [[ -d "$1" ]]; then # is directory
 	for FILE in "$1"/*; do
 		if [[ $FILE == *.mp3 ]]
 		then
-			echo "`green Checking` $FILE"
+			echo "`color 2 Checking` $FILE"
 			ffprobe "${FILE}" -loglevel warning 2>&1
       CHECKED=$((CHECKED+1))
 		else
 			if [[ $VERBOSE == true ]]; then
-				echo "`yellow Skipping` $FILE"
+				echo "`color 3 Skipping` $FILE"
 			fi
       SKIPPED=$((CHECKED+1))
 		fi
@@ -69,12 +56,12 @@ if [[ -d "$1" ]]; then # is directory
 elif [[ -f "$1" ]]; then # is file
 	FILE="$1"
 	if [[ $FILE == *.mp3 ]]; then
-		echo "`cyan Checking` $FILE"
+		echo "`color 6 Checking` $FILE"
 		ffprobe "${FILE}" -loglevel warning 2>&1
 	else
-		echo "`red Unsupported file extension:` $FILE"
+		echo "`color 1 Unsupported file extension:` $FILE"
 	fi
 else
-	echo "`red Argument is not a file or directory:` $1"
+	echo "`color 1 Argument is not a file or directory:` $1"
 	exit 1
 fi
