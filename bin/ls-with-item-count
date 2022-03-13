@@ -1,0 +1,33 @@
+#! /bin/zsh
+
+help() {
+  echo "List directories by item count"
+  echo ""
+  echo "`color 2 Usage:` list-dirs <path> <min-depth> [max-depth]"
+  echo ""
+  echo "`color 2 Example:` list-dirs . 1"
+  echo ""
+}
+
+# no args
+if [[ "$#" < 1 ]]; then help; exit 0; fi
+
+ARG="$1"
+MINDEPTH="$2"
+MAXDEPTH="$3"
+
+if [[ -z "$MAXDEPTH" ]]; then
+  MAXDEPTH="$MINDEPTH"
+fi
+
+if [[ "$ARG" && "$MINDEPTH" ]]; then
+  DIRS=$(find "$ARG" -type d -mindepth "$MINDEPTH" -maxdepth "$MAXDEPTH")
+  # echo "$DIRS"
+  IFS="\n"
+  while read -r LINE; do
+    COUNT=$(find "$LINE" -name "*" | wc -l)
+    echo "$COUNT $LINE"
+  done <<< "$DIRS"
+else
+  help
+fi
