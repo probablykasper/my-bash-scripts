@@ -1,6 +1,6 @@
 #! /bin/bash
 
-aerender='/Applications/Adobe After Effects 2020/aerender'
+aerender='/Applications/Adobe After Effects 2022/aerender'
 
 help() {
   echo "`color 2 Usage:` render [options] <file> [file...]"
