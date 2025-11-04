@@ -1,0 +1,41 @@
+#! /bin/bash
+
+help() {
+    echo "Usage: $(basename "$0") <restic_repository> [fast|slow]"
+    echo ""
+    echo "To save your password, run:"
+    echo "	security add-generic-password -T '$(realpath "$0")' -s Restic -a <RESTIC_REPOSITORY> -w"
+}
+
+REPO="$1"
+MODE="${2:-fast}"
+
+if [ "$REPO" = "" ]; then
+    help
+    exit 0
+fi
+
+if [ "$MODE" = "fast" ]; then
+    CHUNK_SIZE="8M"
+elif [ "$MODE" = "slow" ]; then
+    CHUNK_SIZE="256K"
+else
+    help
+    exit 0
+fi
+echo "Running in ${MODE} mode (chunk size: $CHUNK_SIZE)"
+
+PW=$(security find-generic-password -w -s 'Restic' -a "$REPO")
+
+	# RCLONE_BWLIMIT=100M \
+(
+  RESTIC_PASSWORD="$PW" \
+	GOMAXPROCS=5 \
+	RESTIC_PROGRESS_FPS=1 \
+	RCLONE_VERBOSE=1 \
+	RCLONE_DRIVE_CHUNK_SIZE=$CHUNK_SIZE \
+	restic -r "${REPO}" backup \
+	-o rclone.connections=1 --stuck-request-timeout 5s \
+	--files-from "$HOME/Documents/restic/includes-partial.txt" \
+	--exclude-caches --exclude .DS_Store
+)
