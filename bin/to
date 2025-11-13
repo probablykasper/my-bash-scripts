@@ -1,0 +1,270 @@
+#! /bin/zsh
+
+color() {
+    [[ -n "$TERM" ]] && tput setaf "$1"
+    echo -n - "${@:2}"
+    [[ -n "$TERM" ]] && tput sgr0
+}
+red() { color 1 "$@"; }
+green() { color 2 "$@"; }
+yellow() { color 3 "$@"; }
+cyan() { color 6 "$@"; }
+reset() { tput sgr0; }
+
+help() {
+    echo "\
+`green Usage:`
+    `cyan $FILENAME` <format> [options] <file1> [file2...]
+
+`green Options:`
+    `cyan format`           Format to convert to.
+    `cyan --formats`        List all supported formats.
+    `cyan -v, --verbose`    If you love logs.
+    `cyan -h, --help`       Show this help message.
+
+Prefix arguments with `yellow -` to pass them directly to FFmpeg or ImageMagick, like `yellow --ac -128k`."
+}
+
+list_formats() {
+    echo "
+    `green Video formats:`
+        `cyan mp4`
+        `cyan mp4-h265`
+        `cyan mov`
+        `cyan webm`
+
+    `green Audio formats:`
+        `cyan mp3`      320kbps. Custom bitrate example: `cyan mp3:128`
+        `cyan flac`
+        `cyan aiff`
+        `cyan opus`     256kbps. Custom bitrate example: `cyan opus:128`
+
+    `green Image formats:`
+        `cyan jpg`      90 quality. Custom quality example: `cyan jpg:75` (0-100)
+        `cyan png`
+        `cyan webp`     90 quality. Custom quality example: `cyan webp:75` (0-100)
+        `cyan gif`
+    "
+}
+
+FILENAME=${0##*/}
+ARGS=("$@")
+FORMAT="$1"
+CMD=ffmpeg
+OPTIONS=()
+
+# no args
+if [[ "$#" < 1 ]]; then help; exit 0; fi
+
+# parse args
+for ((i = 1; i <= "$#ARGS"; i++)); do
+    ARG="$ARGS[i]"
+    case "$ARG" in
+        -h|--help)
+            HELP=true
+            ;;
+        --formats)
+            LIST_FORMATS=true
+            ;;
+        -v|--verbose)
+            VERBOSE=true
+            ;;
+        -*)
+            CUSTOM_OPTIONS=true
+            OPTIONS+=("${ARG#?}")
+            ;;
+        *)
+            # dont save file if arg is first (aka format)
+            if [[ $i == 1 ]]; then
+                :
+            elif [[ -f "$ARG" ]]; then # if file exists
+                FILES+=("$ARG")
+            else
+                SKIPFILES+=("$ARG")
+            fi
+            ;;
+    esac
+done
+
+# check for changed default options
+changed_defaults() {
+    for ARG in "$@"; do
+        case "$ARG" in
+            "-b:a")
+                AUDIO_BITRATE_CHANGED=true
+                ;;
+            "-quality")
+                QUALITY_CHANGED=true
+                ;;
+            "-loglevel")
+                LOGLEVEL_CHANGED=true
+                ;;
+            "-265-params")
+                X256_PARAMS_CHANGED=true
+                ;;
+            "-nostat")
+                STAT_DISABLED=true
+                ;;
+            "-filter_complex")
+                FILTER_COMPLEX_CHANGED=true
+                ;;
+        esac
+    done
+}
+changed_defaults ${OPTIONS[@]}
+
+# format
+case "$FORMAT" in
+    mov|webm|wav|flac|aiff)
+        ;;
+    mp4|mp4-h264|mp4-h265)
+        if [[ $FORMAT == "mp4-h265" ]]; then
+            OPTIONS+=("-c:v" "libx265")
+            OPTIONS+=("-vtag" "hvc1")
+            ENCODER="x265"
+            OPTIONS+=("-crf" "20") # according to ffmpeg, x265 CRF 28 visually corresponds to about x264 CRF 23
+        else
+            OPTIONS+=("-c:v" "libx264")
+            OPTIONS+=("-crf" "17")
+        fi
+        FORMAT="mp4"
+        OPTIONS+=("-c:a" "aac")
+        OPTIONS+=("-b:a" "256k")
+        OPTIONS+=("-preset" "medium")
+        ;;
+    opus)
+        if [[ $AUDIO_BITRATE_CHANGED != true ]]; then
+            OPTIONS+=("-b:a" "256k")
+        fi
+        ;;
+    mp3)
+        if [[ $AUDIO_BITRATE_CHANGED != true ]]; then
+            OPTIONS+=("-b:a" "320k")
+        fi
+        ;;
+    mp3:*|opus:*)
+        REGEX="^(mp3|opus)(:|-|\/)([0-9]{1,3})(k|kbps)?$"
+        if [[ "$FORMAT" =~ $REGEX ]]; then
+            FORMAT="${match[1]}"
+            if [[ $AUDIO_BITRATE_CHANGED != true ]]; then
+                OPTIONS+=("-b:a" "${match[3]}k")
+            fi
+        else
+            INVALID_FORMAT=true
+        fi
+        ;;
+    png)
+        CMD=magick
+        ;;
+    jpg|webp)
+        CMD=magick
+        if [[ $QUALITY_CHANGED != true ]]; then
+            OPTIONS+=("-quality" "90")
+        fi
+        ;;
+    jpg:*|webp:*)
+        CMD=magick
+        REGEX="^(jpg|webp)(:|-|\/)?([0-9]{1,3})(%)?$"
+        if [[ "$FORMAT" =~ $REGEX ]]; then
+            FORMAT="${match[1]}"
+            if [[ $QUALITY_CHANGED != true ]]; then
+                OPTIONS+=("-quality" "${match[3]}")
+            fi
+        else
+            INVALID_FORMAT=true
+        fi
+        ;;
+    gif)
+        CMD=ffmpeg
+        if [[ $FILTER_COMPLEX_CHANGED != true ]]; then
+            OPTIONS+=("-filter_complex")
+            OPTIONS+=("[0:v] fps=15,scale=480:-1,split [a][b];[a] palettegen [p];[b][p] paletteuse")
+        fi
+        ;;
+    '')
+        NO_FORMAT=true
+        ;;
+    *)
+        INVALID_FORMAT=true
+        ;;
+esac
+
+if [[ $HELP == true ]]; then
+    help; exit 0
+elif [[ $LIST_FORMATS == true ]]; then
+    list_formats; exit 0
+elif [[ $NO_FORMAT == true ]]; then
+    echo "`red Error:` No format provided"; exit 1
+elif [[ $INVALID_FORMAT == true ]]; then
+    echo "`red Error:` Invalid format: $FORMAT"; exit 1
+elif [[ ${#SKIPFILES[@]} > 0 ]]; then
+    for SKIPFILE in "${SKIPFILES[@]}"; do
+        echo "`red Error:` Invalid argument or non-existant file: $SKIPFILE"
+    done
+    exit 1
+elif [[ ${#FILES[@]} == 0 ]]; then
+    echo "`red Error:` No files specified"; exit 1
+fi
+
+# verbose
+if [[ $CMD == "ffmpeg" && $VERBOSE != true && $LOGLEVEL_CHANGED != true ]]; then
+    OPTIONS+=("-loglevel" "warning")
+    OPTIONS+=("-stats") # print progress
+    if [[ $ENCODER == "x265" && $X256_PARAMS_CHANGED != true ]]; then
+        OPTIONS+=("-x265-params" "log-level=warning")
+    fi
+elif [[ $CMD == "magick" && $VERBOSE == true ]]; then
+    OPTIONS+=("-verbose")
+fi
+
+for FILE in "${FILES[@]}"; do
+
+    # if file does not exist
+    if [[ ! -f "$FILE" ]]; then
+        echo "`red Error:` File no longer exists (Skipping): `cyan"$FILE"`"
+        continue
+    fi
+
+    FILE_WITHOUT_EXT=${FILE%.*}
+    NEW_FILE_TEMP="$FILE_WITHOUT_EXT CONVERTING... $((10000 + RANDOM)).$FORMAT"
+
+    echo "Converting to $FORMAT: `cyan $FILE`"
+
+    # custom options
+    if [[ $VERBOSE == true ]]; then
+        FILE_ECHO=$(printf "%q" "${FILE}")
+        OPTIONS_ECHO=$(printf " %q" "$OPTIONS[@]")
+        NEW_FILE_ECHO=$(printf "%q" "$FILE_WITHOUT_EXT converted.$FORMAT")
+        
+        if [[ $CMD == "ffmpeg" ]]; then
+            echo Command: `green ffmpeg -i "$FILE_ECHO""$OPTIONS_ECHO" "$NEW_FILE_ECHO"`
+        elif [[ $CMD == "magick" ]]; then
+            echo Command: `green magick"$OPTIONS_ECHO" "$FILE_ECHO""[0]" "$NEW_FILE_ECHO"`
+        fi
+    fi
+
+    if [[ $CMD == "ffmpeg" ]]; then
+        ffmpeg -i "$FILE" "${OPTIONS[@]}" "$NEW_FILE_TEMP" || { echo `red Error:` Conversion failed;  exit 1; }
+    elif [[ $CMD == "magick" ]]; then
+        magick "${OPTIONS[@]}" "$FILE""[0]" "$NEW_FILE_TEMP" || { echo `red Error:` Conversion failed;  exit 1; }
+    fi
+
+    # clear ffmpeg progress output
+    if [[ $CMD == "ffmpeg" && $VERBOSE != true && $LOGLEVEL_CHANGED != true ]]; then
+        tput cuu 1 && tput el # go up one line and clear the line
+    fi
+
+    COUNT=1
+    NEW_FILE="$FILE_WITHOUT_EXT converted.$FORMAT"
+    while [[ -f "$NEW_FILE" ]]; do
+        if [[ -f "$NEW_FILE" ]]; then
+            NEW_FILE="$FILE_WITHOUT_EXT converted ($COUNT).$FORMAT"
+            (( COUNT++ ))
+        else
+            break
+        fi
+    done
+
+    mv "$NEW_FILE_TEMP" "$NEW_FILE"
+
+done

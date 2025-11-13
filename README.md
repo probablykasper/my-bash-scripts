@@ -22,6 +22,43 @@ Some of the scripts are described below. To see the help menus for the other scr
 ### welp
 Lists all scripts in the `bin` folder.
 
+### to
+
+```
+Usage:
+    to <format> [options] <file1> [file2...]
+
+Options:
+    format           Format to convert to.
+    --formats        List all supported formats.
+    -v, --verbose    If you love logs.
+    -h, --help       Show this help message.
+
+    Prefix arguments with - to pass them directly to
+    FFmpeg or ImageMagick, like --ac -128k.
+```
+
+Running `to --formats` shows the supported formats:
+```
+Video formats:
+    mp4
+    mp4-h265
+    mov
+    webm
+
+Audio formats:
+    mp3      320kbps. Custom bitrate example: mp3:128
+    flac
+    aiff
+    opus     256kbps. Custom bitrate example: opus:128
+
+Image formats:
+    jpg      90 quality. Custom quality example: jpg:75 (0-100)
+    png
+    webp     90 quality. Custom quality example: webp:75 (0-100)
+    gif
+```
+
 ### dco
 Basic wrapper around the `docker-compose` command. The command works the same as `docker-compose`, except:
 - When running `dco run`, the `--rm` argument is added (as long as `-d` or `--detach` are not present).
