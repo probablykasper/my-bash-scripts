@@ -133,13 +133,15 @@ case "$FORMAT" in
         OPTIONS+=("-preset" "medium")
         ;;
     opus)
+		    COPY_AUDIO_IF_POSSIBLE=true
         if [[ $AUDIO_BITRATE_CHANGED != true ]]; then
-            OPTIONS+=("-b:a" "256k")
+            NONCOPY_AUDIO_OPTIONS=("-b:a" "256k")
         fi
         ;;
     mp3)
+		    COPY_AUDIO_IF_POSSIBLE=true
         if [[ $AUDIO_BITRATE_CHANGED != true ]]; then
-            OPTIONS+=("-b:a" "320k")
+            NONCOPY_AUDIO_OPTIONS=("-b:a" "320k")
         fi
         ;;
     mp3:*|opus:*)
@@ -230,12 +232,26 @@ for FILE in "${FILES[@]}"; do
 
     echo "Converting to $FORMAT: `cyan $FILE`"
 
-    # custom options
-    if [[ $VERBOSE == true ]]; then
-        FILE_ECHO=$(printf "%q" "${FILE}")
-        OPTIONS_ECHO=$(printf " %q" "$OPTIONS[@]")
-        NEW_FILE_ECHO=$(printf "%q" "$FILE_WITHOUT_EXT converted.$FORMAT")
-        
+    # Prepare final options with codec copy if possible
+		FINAL_OPTIONS=("${OPTIONS[@]}")
+
+		if [[ $COPY_AUDIO_IF_POSSIBLE == true && $AUDIO_BITRATE_CHANGED != true ]]; then
+		    CODEC=$(ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of csv=p=0 "$FILE")
+		    FILE_EXT="${FILE##*.}"
+				# Copy the codec if possible, but only when converting to a different container
+		    if [[ "$CODEC" == "$FORMAT" && "$FILE_EXT" != "$FORMAT" ]]; then
+		        FINAL_OPTIONS+=("-c:a" "copy")
+		    else
+		        FINAL_OPTIONS+=("${NONCOPY_AUDIO_OPTIONS[@]}")
+		    fi
+		fi
+
+		# custom options
+		if [[ $VERBOSE == true ]]; then
+				FILE_ECHO=$(printf "%q" "${FILE}")
+				OPTIONS_ECHO=$(printf " %q" "$FINAL_OPTIONS[@]")
+				NEW_FILE_ECHO=$(printf "%q" "$FILE_WITHOUT_EXT converted.$FORMAT")
+
         if [[ $CMD == "ffmpeg" ]]; then
             echo Command: `green ffmpeg -i "$FILE_ECHO""$OPTIONS_ECHO" "$NEW_FILE_ECHO"`
         elif [[ $CMD == "magick" ]]; then
@@ -244,7 +260,7 @@ for FILE in "${FILES[@]}"; do
     fi
 
     if [[ $CMD == "ffmpeg" ]]; then
-        ffmpeg -i "$FILE" "${OPTIONS[@]}" "$NEW_FILE_TEMP" || { echo `red Error:` Conversion failed;  exit 1; }
+        ffmpeg -i "$FILE" "${FINAL_OPTIONS[@]}" "$NEW_FILE_TEMP" || { echo `red Error:` Conversion failed;  exit 1; }
     elif [[ $CMD == "magick" ]]; then
         magick "${OPTIONS[@]}" "$FILE""[0]" "$NEW_FILE_TEMP" || { echo `red Error:` Conversion failed;  exit 1; }
     fi
