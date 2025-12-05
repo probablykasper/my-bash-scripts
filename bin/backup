@@ -27,6 +27,14 @@ echo "Running in ${MODE} mode (chunk size: $CHUNK_SIZE)"
 
 PW=$(security find-generic-password -w -s 'Restic' -a "$REPO")
 
+copy_if_different() {
+    if ! cmp -s "$1" "$2"; then
+        cp -f "$1" "$2"
+    fi
+}
+
+copy_if_different ~/.nix-profile/manifest.json ~/Documents/nix-backup/manifest.json
+
 	# RCLONE_BWLIMIT=100M \
 (
   RESTIC_PASSWORD="$PW" \
