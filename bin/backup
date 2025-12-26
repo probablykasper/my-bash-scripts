@@ -44,6 +44,7 @@ copy_if_different ~/.nix-profile/manifest.json ~/Documents/nix-backup/manifest.j
 	RCLONE_DRIVE_CHUNK_SIZE=$CHUNK_SIZE \
 	restic -r "${REPO}" backup \
 	-o rclone.connections=1 --stuck-request-timeout 5s \
-	--files-from "$HOME/Documents/restic/includes-partial.txt" \
-	--exclude-caches --exclude .DS_Store
+	--files-from "$HOME/Documents/restic/include.txt" \
+	--exclude-file "$HOME/Documents/restic/exclude.txt" \
+	--exclude-caches
 )
