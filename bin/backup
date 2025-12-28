@@ -37,12 +37,13 @@ copy_if_different ~/.nix-profile/manifest.json ~/Documents/nix-backup/manifest.j
 
 	# RCLONE_BWLIMIT=100M \
 (
+  RESTIC_REPOSITORY="$REPO"
   RESTIC_PASSWORD="$PW" \
 	GOMAXPROCS=5 \
 	RESTIC_PROGRESS_FPS=1 \
 	RCLONE_VERBOSE=1 \
 	RCLONE_DRIVE_CHUNK_SIZE=$CHUNK_SIZE \
-	restic -r "${REPO}" backup \
+	restic backup \
 	-o rclone.connections=1 --stuck-request-timeout 5s \
 	--files-from "$HOME/Documents/restic/include.txt" \
 	--exclude-file "$HOME/Documents/restic/exclude.txt" \
