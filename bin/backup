@@ -5,10 +5,17 @@ help() {
     echo ""
     echo "To save your password, run:"
     echo "	security add-generic-password -T '$(realpath "$0")' -s Restic -a <RESTIC_REPOSITORY> -w"
+    echo ""
+    echo "To run a restic command:"
+    echo "  $(basename "$0") <restic_repository> --run-restic"
+}
+
+get_pw() {
+    security find-generic-password -w -s 'Restic' -a "$REPO"
 }
 
 REPO="$1"
-MODE="${2:-fast}"
+MODE="$2"
 
 if [ "$REPO" = "" ]; then
     help
@@ -19,13 +26,18 @@ if [ "$MODE" = "fast" ]; then
     CHUNK_SIZE="8M"
 elif [ "$MODE" = "slow" ]; then
     CHUNK_SIZE="256K"
+elif [ "$MODE" = "--run-restic" ]; then
+    shift 2
+    RESTIC_ARGS=("$@")
+    RESTIC_REPOSITORY="$REPO" RESTIC_PASSWORD="$(get_pw)" restic "$@"
+    exit 0
 else
     help
     exit 0
 fi
 echo "Running in ${MODE} mode (chunk size: $CHUNK_SIZE)"
 
-PW=$(security find-generic-password -w -s 'Restic' -a "$REPO")
+PW="$(get_pw)"
 
 copy_if_different() {
     if ! cmp -s "$1" "$2"; then
@@ -37,7 +49,7 @@ copy_if_different ~/.nix-profile/manifest.json ~/Documents/nix-backup/manifest.j
 
 	# RCLONE_BWLIMIT=100M \
 (
-  RESTIC_REPOSITORY="$REPO"
+  RESTIC_REPOSITORY="$REPO" \
   RESTIC_PASSWORD="$PW" \
 	GOMAXPROCS=5 \
 	RESTIC_PROGRESS_FPS=1 \
